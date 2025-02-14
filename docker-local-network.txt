@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  frontend:
+    image: react-app
+    container_name: frontend-container
+    ports:
+      - "80:80"  # Expose frontend to the public
+    networks:
+      - public_network
+      - backend_network  # Can communicate with backend on backend_network
+
+  backend:
+    image: nodejs-api
+    container_name: backend-container
+    depends_on:
+      - mysql-db  # Depends on the database to be ready
+    networks:
+      - backend_network  # Only connected to backend network, not exposed to the public
+    environment:
+      - DB_HOST=mysql-db
+      - DB_PORT=3306
+
+  mysql-db:
+    image: mysql:5.7
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: app_db
+    networks:
+      - backend_network  # Only connected to backend network
+    volumes:
+      - db_data:/var/lib/mysql  # Persist data
+
+networks:
+  public_network:  # Exposed to the outside world
+  backend_network:  # Internal, only for backend communication
+
+volumes:
+  db_data:

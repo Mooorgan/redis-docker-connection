@@ -1,0 +1,29 @@
+version: '3.3'
+services:
+  redis-essentials-redis:
+    image: redis:6.2.16
+    container_name: redis-essentials-book
+    restart: always
+    networks:
+      privatecontainer:
+    volumes:
+      - redis_volume_data:/data
+    ports:
+      - 6379:6379
+  nodetest:
+    build: .
+    image: nodetest
+    networks:
+      privatecontainer:
+    volumes:
+      - node_modules_nodetest:/home/app/node_modules
+      - .:/home/app
+
+    container_name: mycontainer_nodetest
+    depends_on:
+      - 'redis-essentials-redis'
+networks:
+  privatecontainer:
+volumes:
+  redis_volume_data:
+  node_modules_nodetest:
