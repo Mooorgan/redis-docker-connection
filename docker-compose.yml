@@ -10,6 +10,7 @@ services:
     volumes:
       - redis_volume_data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ./renamed-commands.conf:/usr/local/etc/redis/renamed-commands.conf
     ports:
       - 6379:6379
   nodetest:
