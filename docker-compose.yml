@@ -3,11 +3,13 @@ services:
   redis-essentials-redis:
     image: redis:6.2.16
     container_name: redis-essentials-book
+    command: redis-server --include /usr/local/etc/redis/redis.conf
     restart: always
     networks:
       privatecontainer:
     volumes:
       - redis_volume_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
     ports:
       - 6379:6379
   nodetest:
